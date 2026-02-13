@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hitest - Hits zum Testen</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="src.js" defer></script>
+    <script src="video.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+</head>
+<body>
+<header>
+    <h1>Hitest</h1>
+</header>
+<nav>
+    <!-- empty -->
+</nav>
+
+<main>
+    <div id="input-div">
+        <label id="input-label">Code:
+            <!-- todo -->
+            <input type="text"
+                   inputmode="numeric"
+                   id="code-input"
+                   pattern="\d*"
+                   maxlength="7"
+                   about="test"
+                   placeholder="123 456">
+        </label>
+        <button id="clear-button" onclick="clearInput()" title="Eingabe löschen"><i class="fas fa-x"></i></button>
+        <button id="play-button" onclick="startPlay()" title="Wiedergabe starten">Play</button>
+    </div>
+
+    <div id="message-div" hidden="hidden"><p id="message-p"></p></div>
+    <div id="video-container"></div>
+
+    <div id="control-div" hidden="hidden">
+        <button id="seek-backward-button" onclick="seekBackward()" title="-10s"><i class="fas fa-backward"></i></button>
+        <button id="play-pause-button" onclick="playOrPauseVideo()" title="Play / Pause"><i class="fas fa-play"></i> <i class="fas fa-pause"></i></button>
+        <button id="seek-forward-button" onclick="seekForward()" title="+10s"><i class="fas fa-forward"></i></button>
+        <button id="stop-player-button" onclick="stopPlayer()" title="Stop"><i class="fas fa-stop"></i></button>
+        <button id="show-conclusion-button" onclick="showHideConclusion()" title="Tooltip für eine Sanuye">Lösung anzeigen</button>
+    </div>
+    <div id="solution-div" hidden="hidden">
+        <p>Titel: <span id="title"></span></p>
+        <p>Jahr: <span id="year"></span></p>
+        <p>Künstler: <span id="artist"></span></p>
+    </div>
+</main>
+
+</body>
+</html>

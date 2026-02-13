@@ -1,0 +1,129 @@
+
+
+body {
+    margin: 1em;
+    /*background-color: #aed3a8;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* horizontal zentrieren */
+    align-items: center;      /* vertikal zentrieren */
+    font-family: sans-serif;
+    border: 1px solid black;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: auto;
+
+    .hidden {
+        display: none;
+    }
+
+    button {
+        padding: 0.5em;
+        font-size: 16px;
+        background-color: #4CAF50;
+        border-radius: 6px;
+        color: white;
+        border: none;
+    }
+    button:hover {
+        background-color: #45a049;
+        cursor: pointer;
+    }
+
+    header {
+        /*display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;*/
+    }
+
+    nav a {
+        padding-right: 1em;
+    }
+
+    main {
+        /*background-color: lightblue;*/
+        /*padding: 1em;*/
+
+        div {
+            padding: 1em;
+            margin: 1em;
+            border: 1px solid black;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        div p {
+            margin: 0;
+        }
+
+        #input-div {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-areas:
+                "input clear-button"
+                "play-button play-button";
+            ;
+            /*align-content: center;*/
+            justify-content: center;
+            gap: 1em;
+
+            #input-label {
+                grid-area: input;
+            }
+            #play-button {
+                grid-area: play-button;
+            }
+            #clear-button {
+                grid-area: clear-button;
+            }
+        }
+
+        #message-div {
+            text-align: center;
+        }
+
+        #solution-div {
+            /*display: none;*/
+            display: grid;
+            grid-template-columns: 1fr;
+            align-items: center;
+        }
+
+        #video-container {
+            display: none;
+        }
+        #control-div {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 2fr;
+            gap: 0.9em;
+            grid-template-areas:
+                "backward play-pause play-pause forward"
+                "solution solution stop stop"
+            ;
+            align-content: center;
+
+            #seek-backward-button {
+                grid-area: backward;
+            }
+            #seek-forward-button {
+                grid-area: forward;
+            }
+            #play-pause-button {
+                grid-area: play-pause;
+            }
+            #stop-player-button {
+                grid-area: stop;
+            }
+            #show-conclusion-button {
+                grid-area: solution;
+            }
+        }
+    }
+
+
+}
+
+[hidden] {
+    display: none !important;
+}
