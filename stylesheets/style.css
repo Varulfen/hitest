@@ -55,6 +55,7 @@ body {
 
     main {
         div {
+            min-width: 15em;
             padding: 1em;
             margin: 1em;
             border: 1px solid black;
