@@ -96,6 +96,7 @@ function seekBackward() {
     }
 }
 function stopPlayer() {
+    pauseVideo();
     if (player) {
         player.destroy();  // stop video
         videoContainer.innerHTML = ''; // remove embedded video
