@@ -2,10 +2,11 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KnightDuckClub</title>
+    <title>KnightDuckClub - Alternative</title>
     <link rel="stylesheet" href="stylesheets/style.css">
     <script src="javascript/src.js" defer></script>
     <script src="javascript/video.js" defer></script>
+    <script src="javascript/alternative.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.youtube.com/iframe_api"></script>
     <link rel="icon" href="images/ico.png" type="image/png">
@@ -24,19 +25,16 @@
 </nav>
 
 <main>
-    <div>
-        <form id="input-form" onsubmit="startPlay(); return false;">
-            <label id="input-label">Code:
-                <input type="text"
-                       inputmode="numeric"
-                       id="code-input"
-                       maxlength="7"
-                       about="test"
-                       placeholder="123 456">
-            </label>
-            <button id="clear-button" type="button" onclick="clearInput()" title="Eingabe löschen"><i class="fas fa-x"></i></button>
-            <button id="play-button" type="submit" title="Wiedergabe starten">Play</button>
-        </form>
+    <div class="u">
+        <p>Gesamtanzahl: <span id="total-count"></span></p>
+        <p>Verbleibend: <span id="count"></span></p>
+    </div>
+    <div class="u">
+        <label>Aktueller Code:
+            <input id="code-input" placeholder="123 456" readonly></input>
+        </label>
+        <button onclick="drawRandomCode()">Next Code</button>
+
     </div>
 
     <div id="message-div" hidden="hidden"><p id="message-p"></p></div>
@@ -54,10 +52,15 @@
         <p id="year-p">Jahr: </p><span id="year"></span>
         <p id="artist-p">Künstler: </p><span id="artist"></span>
     </div>
+    <div class="u">
+        <input type="file" id="csvInput" accept=".csv">
+        <button id="down">Download</button>
+    </div>
+
 </main>
-<footer hidden="hidden">
+<footer>
     <div>
-        <a href="alternative.html">Other Version</a>
+        <a href="index.html">Main Version</a>
     </div>
 </footer>
 

@@ -208,6 +208,12 @@ body {
                 background-color: rgb(197, 195, 195);
             }
         }
+
+        .u {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5em;
+        }
     }
 }
 
