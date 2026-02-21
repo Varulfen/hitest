@@ -212,8 +212,22 @@ body {
         .u {
             display: grid;
             grid-template-columns: 1fr 1fr;
+            align-items: center;
             gap: 0.5em;
         }
+        .u2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            align-items: center;
+            justify-items: center;
+            gap: 0.5em;
+        }
+        .csvInput {
+            max-width: 20px;
+        }
+    }
+    footer {
+        margin-bottom: 1em;
     }
 }
 
