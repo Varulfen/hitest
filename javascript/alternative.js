@@ -1,7 +1,7 @@
 
 
 let json = {};
-const file = "/../hitest/codes.json";
+const file = "/../../hitest/codes.json";
 //const file = "/src/hitest/codes.json";
 let remainingCodes = [];
 let totalCount;
