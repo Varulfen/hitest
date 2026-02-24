@@ -222,6 +222,19 @@ body {
             justify-items: center;
             gap: 0.5em;
         }
+        .us {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: start;
+            justify-items: start;
+            gap: 0.5em;
+        }
+        .tables table {
+            margin: 0 auto;
+        }
+        .tables table * {
+            padding-right: 1em;
+        }
         .csvInput {
             max-width: 20px;
         }

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnightDuckClub - Statistics</title>
+    <link rel="stylesheet" href="../stylesheets/style.css">
+    <script src="../javascript/alternative.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <link rel="icon" href="../images/ico.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <h1><span>Knight</span><span>&nbsp;&nbsp;&nbsp;&nbsp;Duck</span><span>&nbsp;&nbsp;Club</span></h1>
+    <a href="../index.html"><img id="header-image" src="../images/duck.png" alt="DJ Duck"/></a>
+</header>
+<nav>
+    <!-- empty -->
+</nav>
+
+<main>
+    <div class="us">
+        <p>Anzahl Songs: </p><p id="total-count"></p>
+        <p>Häufigstes Jahr: </p><p>2001 (29)</p>
+        <p>Durchschnittsjahr: </p><p>1998.7</p>
+        <p>Häufigste Künstler: </p><p>Feuerschwanz (10)</p>
+        <p></p><p>Saltatio Mortis (8)</p>
+        <p></p><p>Versengold (6)</p>
+        <p>Mehrfach vorgeschlagen: </p><p>49 Songs (s. Tabelle)</p>
+        <p>nach Mitternacht hinzugefügt: </p><p>35 %</p>
+    </div>
+
+    <!--<div id="message-div" hidden="hidden"><p id="message-p"></p></div>-->
+    <div class="u">
+        <button onclick="showGenres()" id="genres">Genre anzeigen</button>
+        <button onclick="ladeCSV()" id="button">Duplikate anzeigen</button>
+    </div>
+
+    <div id="genre-tabelle" class="tables" hidden="hidden">
+        <table>
+            <thead>
+            <tr>
+                <th>Genre</th>
+                <th>Anzahl Songs</th>
+                <th>Prozent</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Pop</td>
+                <td>167</td>
+                <td>24,7 %</td>
+            </tr>
+            <tr>
+                <td>Rock / Alternative</td>
+                <td>133</td>
+                <td>19,6 %</td>
+            </tr>
+            <tr>
+                <td>Metal / Hard Rock</td>
+                <td>100</td>
+                <td>14,8 %</td>
+            </tr>
+            <tr>
+                <td>Folk / Mittelalter</td>
+                <td>78</td>
+                <td>11,5 %</td>
+            </tr>
+            <tr>
+                <td>Elektronisch / Dance</td>
+                <td>67</td>
+                <td>9,9 %</td>
+            </tr>
+            <tr>
+                <td>Schlager</td>
+                <td>50</td>
+                <td>7,4 %</td>
+            </tr>
+            <tr>
+                <td>Klassik / Soundtrack</td>
+                <td>39</td>
+                <td>5,8 %</td>
+            </tr>
+            <tr>
+                <td>Hip-Hop / Rap</td>
+                <td>33</td>
+                <td>4,9 %</td>
+            </tr>
+            <tr>
+                <td>R&B / Soul</td>
+                <td>11</td>
+                <td>1,6 %</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="tabelle" hidden="hidden" class="tables"></div>
+
+    <script>
+        const table = document.getElementById("tabelle");
+        const button = document.getElementById("button");
+        const genre = document.getElementById("genres");
+        const genreTable = document.getElementById("genre-tabelle");
+
+        function showGenres() {
+            if(genreTable.hidden === true) {
+                genreTable.hidden = false;
+                genre.textContent = "Genre ausblenden";
+            }
+            else {
+                genreTable.hidden = true;
+                genre.textContent = "Genre anzeigen";
+            }
+        }
+
+        async function ladeCSV() {
+            const response = await fetch("../data/duplikate.csv");
+            const buffer = await response.arrayBuffer();
+            const text = new TextDecoder("utf-8").decode(buffer);
+
+            const lines = text.trim().split("\n");
+
+            const data = lines.map((line, index) => {
+                if (index === 0) {
+                    // Neue Kopfzeile
+                    return ["Titel", "Anzahl"];
+                }
+
+                // Von rechts aufteilen!
+                const parts = line.split(",");
+
+                const anzahl = parts.pop().trim();      // letzte Spalte
+                const kuenstler = parts.pop().trim();   // vorletzte Spalte
+                const titel = parts.join(",").trim();   // Rest gehört zum Titel
+
+                return [titel, anzahl];
+            });
+
+            renderTable(data);
+
+            if(table.hidden === true) {
+                table.hidden = false;
+                button.textContent = "Duplikate ausblenden";
+            }
+            else  {
+                table.hidden = true;
+                button.textContent = "Duplikate anzeigen";
+            }
+        }
+
+        function renderTable(rows) {
+            let html = "<table border='1'>";
+
+            rows.forEach((row, index) => {
+                html += "<tr>";
+                row.forEach(cell => {
+                    html += index === 0
+                        ? `<th>${cell}</th>`
+                        : `<td>${cell}</td>`;
+                });
+                html += "</tr>";
+            });
+
+            html += "</table>";
+            document.getElementById("tabelle").innerHTML = html;
+        }
+    </script>
+</main>
+<footer>
+    <div>
+        <a href="../index.html">Main Version</a>
+        <!--<a href="alternative.html">Alternative Version</a>-->
+    </div>
+</footer>
+
+</body>
+</html>

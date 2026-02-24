@@ -1,8 +1,8 @@
 
 
 let json = {};
-const file = "/../../hitest/codes.json";
-//const file = "/src/hitest/codes.json";
+//const file = "/../../hitest/codes.json";
+const file = "/src/hitest/codes.json";
 let remainingCodes = [];
 let totalCount;
 
@@ -19,15 +19,10 @@ window.addEventListener("DOMContentLoaded", () => {
             totalCount = remainingCodes.length;
             document.getElementById("total-count").textContent = totalCount;
             document.getElementById("count").textContent = remainingCodes.length.toString();
+            hideMessageDiv();
         })
-        .catch(error => showMessage('Error loading the JSON:', error));
+        .catch(() => showMessage('Cannot load JSON'));
 })
-
-
-function loadJson() {
-
-}
-
 
 
 function drawRandomCode() {
@@ -47,13 +42,13 @@ function drawRandomCode() {
     remainingCodes.splice(randomIndex, 1);
 
     // Status anzeigen
-    document.getElementById("total-count").textContent = totalCount;
     document.getElementById("count").textContent = remainingCodes.length.toString();
 
     codeInput.value = code;
     startPlay();
-
 }
+
+// Restliche Codes herunterladen
 downloadBtn.addEventListener("click", function() {
 
     // CSV Header + Codes
@@ -76,11 +71,7 @@ downloadBtn.addEventListener("click", function() {
 });
 
 
-const totalEl = document.getElementById("total");
-const remainingEl = document.getElementById("remaining");
-const drawBtn = document.getElementById("drawBtn");
-
-// CSV laden
+// restliche Codes hochladen
 document.getElementById("csvInput").addEventListener("change", function(event) {
     const file = event.target.files[0];
     if (!file) return;
