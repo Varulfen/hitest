@@ -1,13 +1,16 @@
 
 
 const videoContainer = document.getElementById("video-container");
-const controlDiv = document.getElementById('control-div');
 const playPauseButtonIcon = document.getElementById('play-pause-button-icon');
-const playPauseButton = document.getElementById('play-pause-button');
-const seekBackwardsButton = document.getElementById('seek-backward-button');
-const seekForwardsButton = document.getElementById('seek-forward-button');
+const controlBtnGrp = document.querySelectorAll("#control-button-grp button");
+const loadingSpinner = document.getElementById("loading-spinner");
+
 let player;  // YouTube Player-Objekt
 let playing = false;
+
+let startTime = Date.now();
+let totalDurationSeconds = 0;
+let songCounter = 0;
 
 
 // Funktion zum Einbetten des Videos
@@ -30,33 +33,86 @@ function embedVideo(url) {
             host: 'https://www.youtube-nocookie.com',
             events: {
                 'onReady': onPlayerReady,
-                'onError': onPlayerError
+                'onError': onPlayerError,
+                'onStateChange': onPlayerStateChange
             }
         });
 
-        // show controls
-        controlDiv.hidden = false;
-
         // disable buttons while player loads
-        playPauseButton.disabled = true;
-        seekForwardsButton.disabled = true;
-        seekBackwardsButton.disabled = true;
+        disableControlButtons();
+
     } else {
         showMessage("Ungültige URL: " + url);
+        hideDiv(loadingSpinner);
     }
 }
 
-// if player loaded
-function onPlayerReady() { // event
-    playVideo();
-    playPauseButton.disabled = false;
-    seekForwardsButton.disabled = false;
-    seekBackwardsButton.disabled = false;
+const progressBar = document.getElementById("progressBar");
+const currentTime = document.getElementById("currentTime");
+const durationText = document.getElementById("duration");
+
+setInterval(() => {
+    if (player && player.getDuration && playing) {
+        const current = player.getCurrentTime();
+        const duration = player.getDuration();
+
+        const percent = (current / duration) * 100;
+        progressBar.style.width = percent + "%";
+
+        currentTime.textContent = formatTime(current);
+        durationText.textContent = formatTime(duration);
+    }
+}, 1000);
+
+function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+
+    const paddedMin = min < 10 ? '0' + min : min;
+    const paddedSec = sec < 10 ? '0' + sec : sec;
+
+    return `${paddedMin}:${paddedSec}`;
 }
 
-function onPlayerError() {
-    showMessage("Error");
+function playLastSong() {
+    embedVideo(lastUrl);
 }
+
+function disableControlButtons() {
+    controlBtnGrp.forEach(btn => {
+        if (!btn.disabled) {
+            btn.disabled = true;
+        }
+        if (!btn.classList.contains("disabled")) {
+            btn.classList.add("disabled");
+        }
+    });
+}
+function enableControlButtons() {
+    controlBtnGrp.forEach(btn => {
+        if (btn.disabled) {
+            btn.disabled = false;
+        }
+        if (btn.classList.contains("disabled")) {
+            btn.classList.remove("disabled");
+        }
+    });
+}
+
+function onPlayerReady() { // event
+    playVideo();
+    enableControlButtons();
+    hideDiv(loadingSpinner);
+}
+function onPlayerError() {
+    showMessage("Player Error");
+}
+function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.ENDED) {
+        stopPlayer();
+    }
+}
+
 
 // control functions
 function playOrPauseVideo() {
@@ -72,6 +128,10 @@ function playVideo() {
         player.playVideo();
         playing = true;
         setIcon(playPauseButtonIcon, "fa-pause");
+
+        // Time Tracking
+        startTime = Date.now();
+        console.log(totalDurationSeconds);
     }
 }
 function pauseVideo() {
@@ -79,30 +139,35 @@ function pauseVideo() {
         player.pauseVideo();
         playing = false;
         setIcon(playPauseButtonIcon, "fa-play");
+
+        // Time Tracking
+        const duration = Math.floor((Date.now() - startTime) / 1000);
+        startTime = null;
+        totalDurationSeconds = totalDurationSeconds + duration;
     }
 }
 // 10 sec forwards
 function seekForward() {
     if (player) {
-        let currentTime = player.getCurrentTime();
+        const currentTime = player.getCurrentTime();
         player.seekTo(currentTime + 10, true);
     }
 }
 // 10 sec backwards
 function seekBackward() {
     if (player) {
-        let currentTime = player.getCurrentTime();
+        const currentTime = player.getCurrentTime();
         player.seekTo(currentTime - 10, true);
     }
 }
 function stopPlayer() {
     pauseVideo();
     if (player) {
-        player.destroy();  // stop video
-        videoContainer.innerHTML = ''; // remove embedded video
+        player.destroy();               // stop video
+        videoContainer.innerHTML = '';  // remove embedded video
         player = null;
     }
     playing = false;
-    controlDiv.hidden = true; // hide controls
-    hideConclusion(); // hide solution
+    disableControlButtons();
+    songCounter++;
 }

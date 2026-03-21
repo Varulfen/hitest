@@ -1,65 +1,89 @@
 
 const codeInput = document.getElementById("code-input");
-const solutionDiv = document.getElementById("solution-div");
 const artistSpan = document.getElementById("artist");
 const yearSpan = document.getElementById("year");
 const titleSpan = document.getElementById("title");
-const showConclusionButton = document.getElementById("show-conclusion-button");
 const messageDiv = document.getElementById("message-div");
 const message = document.getElementById("message-p");
+const solutionCollapseDiv = document.getElementById('solutionCollapseDiv');
+const collapseInstance = bootstrap.Collapse.getInstance(solutionCollapseDiv) || new bootstrap.Collapse(solutionCollapseDiv, {toggle: false});
+const repeatButton = document.getElementById("repeat-button");
+
 let jsonLoaded = false;
 let cachedJson = null;
-let showingConclusion = false;
+let lastUrl = "";
 
 document.addEventListener("DOMContentLoaded", () => {
-    //showMessage("test");
+    disableControlButtons();
+    // Benutzer Anzeige aktualisieren / Setzen / whatever
 })
 
+// Formatierung Code Input
 codeInput.addEventListener("input", function() {
     // Nur Zahlen behalten
     let value = this.value.replace(/\D/g, "").slice(0, 6);
-
     // Nach der 3. Zahl ein Leerzeichen einfügen
     if (value.length > 3) {
         value = value.slice(0, 3) + " " + value.slice(3);
     }
-
     this.value = value;
 });
 
 function startPlay() {
+    showDiv(loadingSpinner);
+    console.clear(); // avoid flooding
     stopPlayer();
     const searchCode = codeInput.value.replace(" ", "");
-    //getAllCodes(); // no then needed, prints array to console
     getEntry(searchCode).then(entry => {
         if(!jsonLoaded) {
             showMessage("JSON konnte nicht geladen werden");
+            hideDiv(loadingSpinner);
         }
         else if (entry) {
             hideMessageDiv();
-            hideConclusion();
-            setConclusion(entry);
+            hideConclusion(entry);
+
+            setTimeout(() => {
+                setConclusion(entry);
+            }, 1000); // ms
+
+            if (repeatButton.classList.contains("disabled")) {
+                repeatButton.classList.remove("disabled");
+            }
+
+            lastUrl = entry.url;
             embedVideo(entry.url);
         } else {
             showMessage("Code wurde nicht gefunden");
-            stopPlayer();
+            hideDiv(loadingSpinner);
         }
     });
 }
 
-function setIcon(element, newIcon) {
-    element.className = ''; // alle bisherigen Klassen löschen
-    element.classList.add('fas', newIcon); // neues Icon setzen
+function setIcon(element, newIcon, scIcon) {
+    element.className = '';                         // alle bisherigen Klassen löschen
+    element.classList.add('fas', newIcon, scIcon);  // neues Icon setzen
+}
+
+function showDiv(element) {
+    if(element.classList.contains('d-none')) {
+        element.classList.remove('d-none');
+    }
+}
+function hideDiv(element) {
+    if(!element.classList.contains('d-none')) {
+        element.classList.add('d-none');
+    }
 }
 
 // Messages
 function showMessage(content) {
     message.textContent = content;
-    messageDiv.hidden = false;
+    showDiv(messageDiv);
 }
 function hideMessageDiv() {
     message.textContent = "";
-    messageDiv.hidden = true;
+    hideDiv(messageDiv);
 }
 
 function clearInput() {
@@ -68,36 +92,22 @@ function clearInput() {
     codeInput.focus();
 }
 
-// Solutions
-function showHideConclusion() {
-    if(showingConclusion) {
-        hideConclusion()
-    }
-    else {
-        showConclusion();
-    }
-}
-function showConclusion() {
-    showingConclusion = true;
-    showConclusionButton.textContent = "Lösung ausblenden";
-    solutionDiv.hidden = false;
-}
 function hideConclusion() {
-    showingConclusion = false;
-    showConclusionButton.textContent = "Lösung anzeigen";
-    solutionDiv.hidden = true;
+    collapseInstance.hide();
 }
+
 function setConclusion(entry) {
     artistSpan.textContent = entry.artist;
     yearSpan.textContent = entry.year;
     titleSpan.textContent = entry.title;
+    document.getElementById("duck").textContent = entry.duck || "XXX";
 }
 
 // Funktionen zum Lesen des JSON
 async function loadData() {
     if (cachedJson) return cachedJson;
 
-    const response = await fetch("codes.json");
+    const response = await fetch("../data/codes.json");
     if (!response.ok) {
         return null;
     }

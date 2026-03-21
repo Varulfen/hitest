@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="de">
 <head>
     <!-- Metadaten -->
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DT - Alternative Version</title>
+    <title>Duck Tapes</title>
     <link rel="icon" href="../images/ico.png" type="image/png">
 
     <!-- Bootstrap -->
@@ -20,22 +21,20 @@
     <script src="../components/controls.js"></script>
     <script src="../components/solution.js"></script>
     <script src="../javascript/theme.js" defer></script>
-    <script src="../javascript/alternative.js" defer></script>
     <script type="module" src="../javascript/backend.js" defer></script>
 
     <script src="https://www.youtube.com/iframe_api" defer></script>
 </head>
 
 <body style="min-width: 20.5em">
-<header>
-    <!-- empty -->
-</header>
 
+<header></header>
 <my-navbar></my-navbar>
+
 
 <main>
 
-    <!-- Img + Input -->
+<!-- Img + Input -->
     <div class="card m-3" >
         <div class="row g-0">
             <div class="col-5 m-1 d-flex justify-content-center align-items-center">
@@ -45,23 +44,20 @@
                 <div class="card-body">
                     <h5 class="card-title">Code</h5>
 
-                    <form onsubmit="drawRandomCode(); return false;">
+                    <form onsubmit="startPlay(); return false;">
                         <div class="input-group mb-3">
-                            <input id="code-input" inputmode="numeric" class="form-control" readonly placeholder="123 456" aria-label="Code" aria-describedby="close-btn-span">
+                            <input id="code-input" inputmode="numeric" class="form-control" placeholder="123 456" aria-label="Code" aria-describedby="close-btn-span">
                             <span id="close-btn-span" class="input-group-text">
-                                <button id="clear-button" disabled class="btn-close disabled" onclick="clearInput()" type="button" aria-label="Close"></button>
+                                <button id="clear-button" class="btn-close" onclick="clearInput()" type="button" aria-label="Close"></button>
                             </span>
                         </div>
 
-                        <button id="play-button" class="w-100 btn btn-outline-primary" type="submit">
-                            Next
+                        <button id="play-button" class="w-50 btn btn-outline-primary" type="submit">
+                            Play
                             <span id="loading-spinner" class="spinner-border spinner-border-sm d-none" aria-hidden="true"></span>
                         </button>
+                        <button id="repeat-button" type="button" class="btn btn-outline-secondary disabled" onclick="playLastSong()" title="Vorheriges Lied wiedergeben"><i class="fa fa-repeat fa-stack-0x"></i></button>
                     </form>
-                    <div class="row w-100 mt-1">
-                        <small class="col">Gesamtanzahl: <span id="total-count"></span></small>
-                        <small class="col">Verbleibend: <span id="count"></span></small>
-                    </div>
                 </div>
             </div>
         </div>
@@ -72,31 +68,13 @@
         <p id="message-p" class="mb-1"></p>
     </div>
 
-    <!-- Control Buttons -->
     <my-controls></my-controls>
     <my-solution></my-solution>
-
-    <!-- Down- / Upload -->
-    <div class="accordion m-3" id="downloadAccordion">
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#downloadCollapseDiv" aria-expanded="false" aria-controls="downloadCollapseDiv">
-                    Down- / Upload
-                </button>
-            </h2>
-            <div id="downloadCollapseDiv" class="accordion-collapse collapse" data-bs-parent="#downloadAccordion">
-                <div class="accordion-body">
-                    <input type="file" id="csvInput" class="form-control" accept=".csv">
-                    <button id="down" class="btn btn-outline-secondary mt-1">Download</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <div id="video-container" class="d-none"></div>
 
 </main>
+
 <footer></footer>
 
 </body>
